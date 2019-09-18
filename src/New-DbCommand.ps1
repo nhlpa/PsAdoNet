@@ -1,27 +1,27 @@
 <#
-		.SYNOPSIS
-				Create a new database command.
+  .SYNOPSIS
+    Create a new database command.
 
-		.DESCRIPTION
-				Creates a new System.Data.Common.DbCommand with the command and query provided.
+  .DESCRIPTION
+    Creates a new System.Data.Common.DbCommand with the command and query provided.
 
-		.PARAMETER Connection
-				The Dbconnection to use.
+  .PARAMETER Connection
+    The Dbconnection to use.
 
-		.PARAMETER Query
-				The inline query to run. SEE -InputFile for file-based queries.
+  .PARAMETER Query
+    The inline query to run. SEE -InputFile for file-based queries.
 
-		.PARAMETER InputFile
-				Filename of the query.
+  .PARAMETER InputFile
+    Filename of the query.
 
-		.PARAMETER Parameters
-				Command parameters.
+  .PARAMETER Parameters
+    Command parameters.
 
-		.OUTPUTS 
-				System.Data.Common.DbCommand
+  .OUTPUTS 
+    System.Data.Common.DbCommand
 
-		.EXAMPLE
-				PS C:\> New-DbCommand -Connection (New-SqlConnection -ComputerName SQLVM01) -Query 'SELECT 1'
+  .EXAMPLE
+    PS C:\> New-DbCommand -Connection (New-SqlConnection -ComputerName SQLVM01) -Query 'SELECT 1'
 #>
 function New-DbCommand {
   [CmdletBinding()]

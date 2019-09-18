@@ -1,42 +1,42 @@
 <#
-		.SYNOPSIS
-				Execute existing DbCommand.
+  .SYNOPSIS
+    Execute existing DbCommand.
 
-		.DESCRIPTION
-				Provided a DbCommand will run DbCommand.ExecuteNonQuery().
+  .DESCRIPTION
+    Provided a DbCommand will run DbCommand.ExecuteNonQuery().
 
-		.PARAMETER InputObject
-				The command to execute.
+  .PARAMETER InputObject
+    The command to execute.
 
-		.OUTPUTS
-				int
+  .OUTPUTS
+    int
 
-		.EXAMPLE
-				PS C:\> Invoke-DbCommandNonQuery -InputObject $someDbCommand
+  .EXAMPLE
+    PS C:\> Invoke-DbCommandNonQuery -InputObject $someDbCommand
 #>
 function Invoke-DbCommand {
-	[CmdletBinding()]
-	[OutputType([int])]
-	param (
-		[Parameter(Mandatory=$True,
-							 ValueFromPipeline=$True,
-							 ValueFromPipelineByPropertyName=$True,
-							 HelpMessage='The command to execute.')]
-		[System.Data.Common.DbCommand] $InputObject,
-			
-		[Parameter(HelpMessage='Execute Scalar')]
-		[switch] $Scalar,
+  [CmdletBinding()]
+  [OutputType([int])]
+  param (
+    [Parameter(Mandatory=$True,
+               ValueFromPipeline=$True,
+               ValueFromPipelineByPropertyName=$True,
+               HelpMessage='The command to execute.')]
+    [System.Data.Common.DbCommand] $InputObject,
+      
+    [Parameter(HelpMessage='Execute Scalar')]
+    [switch] $Scalar,
 
-		[Parameter(HelpMessage='Execute Reader')]
-		[switch] $Reader,
+    [Parameter(HelpMessage='Execute Reader')]
+    [switch] $Reader,
 
     [Parameter(HelpMessage='Execute Reader and fill Data Table')]
     [switch] $DataTable)
 
-	begin {}
+  begin {}
 
-	process {
-		Write-Verbose "Invoke-DbCommandNonQuery for $($InputObject.Connection.Database)"       
+  process {
+    Write-Verbose "Invoke-DbCommandNonQuery for $($InputObject.Connection.Database)"       
     Write-Debug "`n$($InputObject.CommandText)`n`n`n"
 
     try {
@@ -62,7 +62,7 @@ function Invoke-DbCommand {
       Write-Verbose "FAILED to Invoke-DbCommandNonQuery for $($InputObject.Connection.Database)"
       $PSCmdlet.ThrowTerminatingError($PSitem)
     }
-	}
+  }
 
-	end {}	
+  end {}	
 }
