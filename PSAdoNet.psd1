@@ -13,7 +13,7 @@
   Author = 'Pim Brouwers'
   
   # Company or vendor of this module
-  CompanyName = 'NHLPA'
+  CompanyName = ''
   
   # Copyright statement for this module
   Copyright = '(c) 2019 Pim Brouwers. All rights reserved.'
