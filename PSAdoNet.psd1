@@ -32,7 +32,6 @@
     '.\src\Close-Resource.ps1',
     '.\src\New-DbCommand.ps1',
     '.\src\Invoke-DbCommand.ps1',
-    # SQL Server
     '.\src\New-SqlServerConnection.ps1',
     '.\src\Invoke-SqlServerBulkCopy.ps1'
   )
@@ -41,8 +40,7 @@
   FunctionsToExport = @(    
     'Close-Resource',
     'New-DbCommand',
-    'Invoke-DbCommand',
-    # SQL Server
+    'Invoke-DbCommand',    
     'New-SqlServerConnection',
     'Invoke-SqlServerBulkCopy'
   )
