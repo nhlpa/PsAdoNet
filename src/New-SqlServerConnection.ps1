@@ -66,7 +66,7 @@ function New-SqlServerConnection {
   }
   
   process {		
-    Write-Verbose "New-SqlConnection for '$ServerInstance'"
+    Write-Verbose "New-SqlServerConnection for '$ServerInstance'"
 
     try {
       $connection = New-Object System.Data.SqlClient.SqlConnection    
@@ -75,7 +75,8 @@ function New-SqlServerConnection {
       Write-Output $connection  
     }
     catch {      			
-      Write-Verbose "FAILED to establish New-SqlConnection for '$connectionString'"
+      Write-Verbose "FAILED to establish New-SqlServerConnection for '$ServerInstance'"
+      Write-Debug "Connection String: $connectionString"
       if($connection) {
         $connection.Dispose()
         Remove-Variable -Name connection  
