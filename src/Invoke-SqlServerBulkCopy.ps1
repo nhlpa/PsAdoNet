@@ -62,12 +62,12 @@ function Invoke-SqlServerBulkCopy {
       $bulkCopy.DestinationTableName = $Table
       
       if ($BatchSize -gt 0) {
-        Write-Verbose "Batch Size: $($bulkCopy.BatchSize)"
         $bulkCopy.BatchSize = $BatchSize 
+        Write-Verbose "Batch Size: $($bulkCopy.BatchSize)"
       }
       
-      Write-Verbose "Bulk Copy Timeout: $($bulkCopy.BulkCopyTimeout)"
       $bulkCopy.BulkCopyTimeout = $BulkCopyTimeout
+      Write-Verbose "Bulk Copy Timeout: $($bulkCopy.BulkCopyTimeout)"
       
       if ($NotifyAfter -gt 0) {
         $bulkCopy.NotifyAfter = $notifyafter
