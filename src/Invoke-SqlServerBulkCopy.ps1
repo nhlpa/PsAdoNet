@@ -22,9 +22,9 @@
     System.Data.SqlClient.SqlBulkCopy
 
   .EXAMPLE
-    PS C:\> Write-SqlBulkCopy -InputObject $someDataReader -Connection (New-SqlConnection -ComputerName SQLVM01) -Table SomeTable
+    PS C:\> Invoke-SqlServerBulkCopy -InputObject $someDataReader -Connection (New-SqlConnection -ComputerName SQLVM01) -Table SomeTable
 #>
-function Invoke-SqlBulkCopy {
+function Invoke-SqlServerBulkCopy {
   [CmdletBinding()]
   [OutputType([System.Data.SqlClient.SqlBulkCopy])]
   param (

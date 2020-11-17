@@ -32,16 +32,18 @@
     '.\src\Close-Resource.ps1',
     '.\src\New-DbCommand.ps1',
     '.\src\Invoke-DbCommand.ps1',
-		'.\src\New-SqlServerConnection.ps1',
-		'.\src\Invoke-SqlServerBulkCopy.ps1'
+    # SQL Server
+    '.\src\New-SqlServerConnection.ps1',
+    '.\src\Invoke-SqlServerBulkCopy.ps1'
   )
   
   # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
   FunctionsToExport = @(    
     'Close-Resource',
     'New-DbCommand',
-		'Invoke-DbCommand',
+    'Invoke-DbCommand',
+    # SQL Server
     'New-SqlServerConnection',
-		'Invoke-SqlServerBulkCopy'
+    'Invoke-SqlServerBulkCopy'
   )
 }
