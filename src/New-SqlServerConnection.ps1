@@ -75,11 +75,11 @@ function New-SqlServerConnection {
       Write-Output $connection  
     }
     catch {      			
-      if (!$Credential) {
-        Write-Verbose "FAILED to establish New-SqlServerConnection for '$connectionString'"  
+      if ($Credential) {
+        Write-Verbose "FAILED to establish New-SqlServerConnection for '$ServerInstance'"
       }
       else {
-        Write-Verbose "FAILED to establish New-SqlServerConnection for '$ServerInstance'"
+        Write-Verbose "FAILED to establish New-SqlServerConnection for '$connectionString'"  
       }
       
       if ($connection) {
