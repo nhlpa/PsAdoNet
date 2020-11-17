@@ -18,8 +18,8 @@
 function Close-Resource {
   [CmdletBinding()]
   param (
-    [Parameter(Mandatory = $True, 
-      ValueFromPipeline = $True)]
+    [Parameter(ValueFromPipeline = $True, 
+      ValueFromPipelineByPropertyName = $True)]    
     $InputObject)
 
   begin {}

@@ -34,7 +34,7 @@ function ConvertTo-DataTable {
     [System.Data.DataTable] $dt = New-Object System.Data.DataTable    
   }
   process {       
-    if ($null -ne $InputObject) {
+    if ($InputObject) {
       foreach ($o in $InputObject) {      
         Write-Verbose "Adding row to DataTable ($o)..."      
         [System.Data.DataRow]$row = $dt.NewRow()
