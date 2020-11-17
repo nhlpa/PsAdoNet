@@ -28,7 +28,7 @@ $conn = New-SqlServerConnection -ServerInstance SQLVM01
 $cmd = New-DbCommand -Query "SELECT * FROM Products"
 
 # Invoke query and display result
-$cmd | Invoke-DbCommand | Format-Table
+$cmd | Invoke-DbCommand -DataTable | Format-Table
 
 # Properly dispose of objects
 Close-Resource $conn, $cmd
