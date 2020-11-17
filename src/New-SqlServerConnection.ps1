@@ -54,15 +54,15 @@ function New-SqlServerConnection {
 
   begin {
     if ($Database) {
-      $databaseClause = "Database=$Database"
+      $databaseClause = "Database=$Database;"
     }
 
     if ($Credential) {
-      $connectionString = "Server=$ServerInstance;$databaseClause;User Id=$($Credential.UserName);Password=$($Credential.GetNetworkCredential().Password)"
+      $connectionString = "Server=$ServerInstance;$($databaseClause)User Id=$($Credential.UserName);Password=$($Credential.GetNetworkCredential().Password)"
       Write-Verbose "Creating connection for '$ServerInstance'"
     }
     else {
-      $connectionString = "Server=$ServerInstance;$databaseClause;Trusted_Connection=true"
+      $connectionString = "Server=$ServerInstance;$($databaseClause)Trusted_Connection=true"
       Write-Verbose "Creating connection for '$connectionString'"
     }
   }
