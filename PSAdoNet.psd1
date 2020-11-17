@@ -30,6 +30,7 @@
   # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
   NestedModules = @(
     '.\src\Close-Resource.ps1',
+    '.\src\ConvertTo-DataTable.ps1',
     '.\src\New-DbCommand.ps1',
     '.\src\Invoke-DbCommand.ps1',
     '.\src\New-SqlServerConnection.ps1',
@@ -39,6 +40,7 @@
   # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
   FunctionsToExport = @(    
     'Close-Resource',
+    'ConvertTo-DataTable'
     'New-DbCommand',
     'Invoke-DbCommand',    
     'New-SqlServerConnection',

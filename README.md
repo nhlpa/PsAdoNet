@@ -46,6 +46,18 @@ $bcp = Invoke-SqlServerBulkCopy $rd -Connection $dest -Table "Products" -BatchSi
 Close-Resource $source, $dest, $rd, $bcp
 ```
 
+An example using `ConvertTo-DataTable` to bulk copy an ad-hoc list of objects to a SQL Server database.
+
+```powershell
+$dest = New-SqlServerConnection -ServerInstance SQLVM02 -Database ProcessDb
+
+$dt = Get-Process | Select-Object -First 5 -Property Id, Description | ConvertTo-DataTable
+$rd = $dt.CreateDataReader()
+$bcp = Invoke-SqlServerBulkCopy $rd -Connection $dest -Table "Processes" -BatchSize 5000 -BulkCopyTimeout 30
+
+Close-Resource $dest, $rd, $bcp
+```
+
 ## Find a bug?
 
 There's an [issue](https://github.com/pimbrouwers/PsAdoNet/issues) for that.

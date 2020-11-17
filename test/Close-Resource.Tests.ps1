@@ -1,16 +1,14 @@
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
-
-. (Resolve-Path "$here\..\src\$sut")
+BeforeAll {
+  Get-ChildItem -Path (Join-Path -Path $PSScriptRoot -ChildPath "\..\src\") | ForEach-Object { . $_.FullName }
+  Add-Type -LiteralPath (Join-Path -Path $PSScriptRoot -ChildPath "\support\CloseableResource.cs")
+}
 
 Describe "Close-Resource" {
-    It "Given non-disposable, it does not error" {
+    It "Given non-disposable, it does not error" {     
       [PSObject]@{} | Close-Resource | Should -BeNullOrEmpty
     }
 
     It "Given closeable & disposable, it closes & disposes" {
-      Add-Type -LiteralPath (Resolve-Path "$here\..\.etc\CloseableResource.cs")
-
       $resource = [TestNamespace.CloseableResource]@{} 
       $resource | Close-Resource
 

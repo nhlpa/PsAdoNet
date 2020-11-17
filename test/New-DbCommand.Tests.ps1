@@ -1,8 +1,6 @@
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
-
-. (Resolve-Path "$here\..\src\$sut")
-
+BeforeAll {
+  Get-ChildItem -Path (Join-Path -Path $PSScriptRoot -ChildPath "\..\src\") | ForEach-Object { . $_.FullName }  
+}
 Describe "New-DbCommand" {
     It "Given valid DbConnection, it returns DbCommand" {        
       $conn = New-Object System.Data.SqlClient.SqlConnection
