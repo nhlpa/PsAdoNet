@@ -29,21 +29,24 @@ function Invoke-SqlServerBulkCopy {
   [OutputType([System.Data.SqlClient.SqlBulkCopy])]
   param (
     
-    [Parameter(Mandatory=$True,
-               ValueFromPipeline=$True,
-               ValueFromPipelineByPropertyName=$True)]
+    [Parameter(Mandatory = $True,
+      ValueFromPipeline = $True,
+      ValueFromPipelineByPropertyName = $True)]
     [System.Data.IDataReader]$InputObject,
     
-    [Parameter(Mandatory=$True)]
+    [Parameter(Mandatory = $True)]
     [System.Data.Common.DbConnection]$Connection,
     
-    [Parameter(Mandatory=$True)]
+    [Parameter(Mandatory = $True)]
     [string] $Table,
    
-    [Parameter(Mandatory=$False)]
+    [Parameter(Mandatory = $False)]
     [int] $BatchSize,
     
-    [Parameter(Mandatory=$False)]
+    [Parameter(Mandatory = $False)]
+    [int] $BulkCopyTimeout,
+
+    [Parameter(Mandatory = $False)]
     [hashtable] $ColumnMappings) 
 
   begin {}
@@ -54,16 +57,21 @@ function Invoke-SqlServerBulkCopy {
     try {
       $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy($Connection)
       $bulkCopy.DestinationTableName = $Table
-      
+            
       if ($BatchSize) { 
         $bulkCopy.BatchSize = $BatchSize 
         Write-Verbose "Batch Size: $($bulkCopy.BatchSize)"
       }
 
+      if ($BulkCopyTimeout) {
+        $bulkCopy.BulkCopyTimeout = $BulkCopyTimeout
+        Write-Verbose "Bulk Copy Timeout: $($bulkCopy.BulkCopyTimeout)"
+      }
+
       if ($ColumnMappings) { 
-          $bulkCopy.ColumnMappings = $ColumnMappings 
-          Write-Verbose "ColumnMappings: $($bulkCopy.ColumnMappings | Format-Table -Property SourceColumn, DestinationColumn -AutoSize | Out-String)"
-        }
+        $bulkCopy.ColumnMappings = $ColumnMappings 
+        Write-Verbose "ColumnMappings: $($bulkCopy.ColumnMappings | Format-Table -Property SourceColumn, DestinationColumn -AutoSize | Out-String)"
+      }
 
       $bulkCopy.WriteToServer($InputObject) 
 
