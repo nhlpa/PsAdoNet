@@ -75,8 +75,13 @@ function New-SqlServerConnection {
       Write-Output $connection  
     }
     catch {      			
-      Write-Verbose "FAILED to establish New-SqlServerConnection for '$ServerInstance'"
-      Write-Debug "Connection String: $connectionString"
+      if (!$Credential) {
+        Write-Verbose "FAILED to establish New-SqlServerConnection for '$connectionString'"  
+      }
+      else {
+        Write-Verbose "FAILED to establish New-SqlServerConnection for '$ServerInstance'"
+      }
+      
       if ($connection) {
         $connection.Dispose()
         Remove-Variable -Name connection  
