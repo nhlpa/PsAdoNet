@@ -29,12 +29,12 @@ function Close-Resource {
       foreach ($o in $InputObject) {
         if ($o) {
           if (Get-Member -InputObject $o -MemberType Method -Name Close) {
-            Write-Verbose "Close-Resource: Closing resource $o"
+            Write-Verbose "Close-Resource: Closing resource..."
             $o.Close()
           }
 
           if (Get-Member -InputObject $o -MemberType Method -Name Dispose) {
-            Write-Verbose "Close-Resource: Disposing resource $o"
+            Write-Verbose "Close-Resource: Disposing resource..."
             $o.Dispose()
           }
         }
