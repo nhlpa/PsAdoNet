@@ -55,7 +55,7 @@ function Invoke-SqlServerBulkCopy {
   begin {}
 
   process {
-    $db = "$($InputObject.Connection.DataSource)\$($InputObject.Connection.Database)\$Table"
+    $db = "$($Connection.DataSource)\$($Connection.Database)\$Table"
     Write-Verbose "Invoke-SqlServerBulkCopy for $db"
 
     try {
