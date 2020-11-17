@@ -36,18 +36,18 @@ function Invoke-DbCommand {
   [CmdletBinding()]
   [OutputType([int])]
   param (
-    [Parameter(Mandatory=$True,
-               ValueFromPipeline=$True,
-               ValueFromPipelineByPropertyName=$True)]
+    [Parameter(Mandatory = $True,
+      ValueFromPipeline = $True,
+      ValueFromPipelineByPropertyName = $True)]
     [System.Data.Common.DbCommand] $InputObject,
       
-    [Parameter(HelpMessage="Execute Scalar")]
+    [Parameter(HelpMessage = "Execute Scalar")]
     [switch] $Scalar,
 
-    [Parameter(HelpMessage="Execute Reader")]
+    [Parameter(HelpMessage = "Execute Reader")]
     [switch] $Reader,
 
-    [Parameter(HelpMessage="Execute Reader and fill Data Table")]
+    [Parameter(HelpMessage = "Execute Reader and fill Data Table")]
     [switch] $DataTable)
 
   begin {}

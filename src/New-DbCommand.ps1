@@ -24,18 +24,18 @@ function New-DbCommand {
   [CmdletBinding()]
   [OutputType([System.Data.Common.DbCommand])]
   param (    
-      [Parameter(Mandatory=$True, 
-                 ValueFromPipeline=$True,
-                 ValueFromPipelineByPropertyName=$True)]
-      [Alias('Connection')]
-      [System.Data.Common.DbConnection] 
-      $InputObject,
+    [Parameter(Mandatory = $True, 
+      ValueFromPipeline = $True,
+      ValueFromPipelineByPropertyName = $True)]
+    [Alias('Connection')]
+    [System.Data.Common.DbConnection] 
+    $InputObject,
 
-      [Parameter(Mandatory=$True)]
-      [string] $Query,
+    [Parameter(Mandatory = $True)]
+    [string] $Query,
 
-      [Parameter(Mandatory=$False)]
-      [hashtable] $Parameters = @{ })
+    [Parameter(Mandatory = $False)]
+    [hashtable] $Parameters = @{ })
 
   begin {}
 
@@ -58,7 +58,7 @@ function New-DbCommand {
     catch {
       Write-Verbose "FAILED to create New-DbCommand for $($InputObject.DataSource)"
       
-      if($command) {
+      if ($command) {
         $command.Dispose()
         Remove-Variable -Name command
       }

@@ -35,20 +35,20 @@ function New-SqlServerConnection {
   [CmdletBinding()]
   [OutputType([System.Data.SqlClient.SqlConnection])]
   param (
-    [Parameter(Mandatory=$True,
-                ValueFromPipeline=$True)]
+    [Parameter(Mandatory = $True,
+      ValueFromPipeline = $True)]
     [string] 
     $ServerInstance,
 
-    [Parameter(Mandatory=$False)]
+    [Parameter(Mandatory = $False)]
     [string] 
     $Database,
     
-    [Parameter(Mandatory=$False)]
+    [Parameter(Mandatory = $False)]
     [System.Management.Automation.PSCredential] 
     $Credential,
     
-    [Parameter(Mandatory=$False)]
+    [Parameter(Mandatory = $False)]
     [Int32] 
     $ConnectionTimeout)
 
@@ -77,7 +77,7 @@ function New-SqlServerConnection {
     catch {      			
       Write-Verbose "FAILED to establish New-SqlServerConnection for '$ServerInstance'"
       Write-Debug "Connection String: $connectionString"
-      if($connection) {
+      if ($connection) {
         $connection.Dispose()
         Remove-Variable -Name connection  
       }

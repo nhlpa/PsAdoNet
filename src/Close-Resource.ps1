@@ -16,29 +16,31 @@
       PS C:\> $someCloseableDisposable, $a, $b | Close-Resource
 #>
 function Close-Resource {
-    [CmdletBinding()]
-    param (
-       [Parameter(Mandatory=$True, 
-                  ValueFromPipeline=$True)]
-       $InputObject)
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory = $True, 
+      ValueFromPipeline = $True)]
+    $InputObject)
 
-    begin {}
+  begin {}
 
-    process {
-      foreach($o in $InputObject) {
-        if($o) {
-          if(Get-Member -InputObject $o -MemberType Method -Name Close) {
+  process {
+    if ($InputObject) {
+      foreach ($o in $InputObject) {
+        if ($o) {
+          if (Get-Member -InputObject $o -MemberType Method -Name Close) {
             Write-Verbose "Close-Resource: Closing resource $o"
             $o.Close()
           }
 
-          if(Get-Member -InputObject $o -MemberType Method -Name Dispose) {
+          if (Get-Member -InputObject $o -MemberType Method -Name Dispose) {
             Write-Verbose "Close-Resource: Disposing resource $o"
             $o.Dispose()
           }
         }
       }
     }
+  }
 
-    end {}
+  end {}
 }
