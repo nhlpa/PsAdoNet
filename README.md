@@ -6,7 +6,7 @@ The goal of PsAdoNet is to encourage the development of composeable ADO.NET solu
 
 ```powershell
 # Installing for a specific user
-Copy-Item -Path {rest of path}\PsAdNet `
+Copy-Item -Path {rest of path}\PsAdoNet `
           -Destination $HOME\Documents\PowerShell\Modules
 
 # Close & re-open shell window
