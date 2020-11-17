@@ -41,13 +41,16 @@ function Invoke-SqlServerBulkCopy {
     [string] $Table,
    
     [Parameter(Mandatory = $False)]
-    [int] $BatchSize,
+    [int] $BatchSize = 0,
     
     [Parameter(Mandatory = $False)]
-    [int] $BulkCopyTimeout,
+    [int] $BulkCopyTimeout = 30,
 
     [Parameter(Mandatory = $False)]
-    [hashtable] $ColumnMappings) 
+    [hashtable] $ColumnMappings,
+
+    [Parameter(Mandatory = $False)]
+    [int] $NotifyAfter = 30) 
 
   begin {}
 
@@ -57,15 +60,17 @@ function Invoke-SqlServerBulkCopy {
     try {
       $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy($Connection)
       $bulkCopy.DestinationTableName = $Table
-            
-      if ($BatchSize) { 
-        $bulkCopy.BatchSize = $BatchSize 
-        Write-Verbose "Batch Size: $($bulkCopy.BatchSize)"
-      }
-
-      if ($BulkCopyTimeout) {
-        $bulkCopy.BulkCopyTimeout = $BulkCopyTimeout
-        Write-Verbose "Bulk Copy Timeout: $($bulkCopy.BulkCopyTimeout)"
+      
+      Write-Verbose "Batch Size: $($bulkCopy.BatchSize)"
+      $bulkCopy.BatchSize = $BatchSize 
+      
+      Write-Verbose "Bulk Copy Timeout: $($bulkCopy.BulkCopyTimeout)"
+      $bulkCopy.BulkCopyTimeout = $BulkCopyTimeout
+      
+      if ($NotifyAfter -gt 0)
+      {
+          $bulkCopy.NotifyAfter = $notifyafter
+          $bulkCopy.Add_SQlRowscopied({ Write-Verbose "Rows copied: $($args[1].RowsCopied)" })
       }
 
       if ($ColumnMappings) { 
