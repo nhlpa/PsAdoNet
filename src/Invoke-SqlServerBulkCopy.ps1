@@ -7,7 +7,7 @@
     to a SQL Server table using System.Data.SqlClient.SqlBulkCopy
 
   .PARAMETER InputObject
-    The source data reader.
+    The source System.Data.IDataReader.
 
   .PARAMETER Connection
     The database connection to use.
@@ -31,38 +31,46 @@ function Invoke-SqlBulkCopy {
     
     [Parameter(Mandatory=$True,
                ValueFromPipeline=$True,
-               ValueFromPipelineByPropertyName=$True,
-               HelpMessage='The source data reader.')]
+               ValueFromPipelineByPropertyName=$True)]
     [System.Data.IDataReader]$InputObject,
     
-    [Parameter(Mandatory=$True,               
-               HelpMessage='The database connection to use.')]
+    [Parameter(Mandatory=$True)]
     [System.Data.Common.DbConnection]$Connection,
     
-    [Parameter(Mandatory=$True,
-               HelpMessage='The destination table.')]
+    [Parameter(Mandatory=$True)]
     [string] $Table,
-
-    [Parameter(Mandatory=$False,
-               HelpMessage='Rows per batch.')]
-    [int] $BatchSize = 2000) 
+   
+    [Parameter(Mandatory=$False)]
+    [int] $BatchSize,
+    
+    [Parameter(Mandatory=$False)]
+    [hashtable] $ColumnMappings) 
 
   begin {}
 
   process {
-    Write-Verbose "Write-SqlBulkCopy: $($bulkCopy.DestinationTableName) / Batch Size: $($bulkCopy.BatchSize)"
+    Write-Verbose "Invoke-SqlServerBulkCopy for $($Table) on $Connection"
 
     try {
       $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy($Connection)
       $bulkCopy.DestinationTableName = $Table
       
-      if ($BatchSize) { $bulkCopy.BatchSize = $BatchSize }
+      if ($BatchSize) { 
+        $bulkCopy.BatchSize = $BatchSize 
+        Write-Verbose "Batch Size: $($bulkCopy.BatchSize)"
+      }
+
+      if ($ColumnMappings) { 
+          $bulkCopy.ColumnMappings = $ColumnMappings 
+          Write-Verbose "ColumnMappings: $($bulkCopy.ColumnMappings | Format-Table -Property SourceColumn, DestinationColumn -AutoSize | Out-String)"
+        }
 
       $bulkCopy.WriteToServer($InputObject) 
 
       $bulkCopy # return for disposal
     } 
     catch {
+      Write-Verbose "FAILED to Invoke-SqlServerBulkCopy for $($InputObject.Connection.DataSource)"
       $PSCmdlet.ThrowTerminatingError($PSitem)
     }
   }

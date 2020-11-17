@@ -16,10 +16,10 @@
   CompanyName = ''
   
   # Copyright statement for this module
-  Copyright = '(c) 2019 Pim Brouwers. All rights reserved.'
+  Copyright = '(c) 2020 Pim Brouwers. All rights reserved.'
   
   # Description of the functionality provided by this module
-  Description = 'ADO.NET for all'
+  Description = 'Composable tools for creating awesome ADO.NET solutions with PowerShell'
   
   # Minimum version of the Windows PowerShell engine required by this module
   PowerShellVersion = '3.0'
@@ -32,8 +32,8 @@
     '.\src\Close-Resource.ps1',
     '.\src\New-DbCommand.ps1',
     '.\src\Invoke-DbCommand.ps1',
-		'.\src\New-SqlConnection.ps1',
-		'.\src\Invoke-SqlBulkCopy.ps1'
+		'.\src\New-SqlServerConnection.ps1',
+		'.\src\Invoke-SqlServerBulkCopy.ps1'
   )
   
   # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -41,7 +41,7 @@
     'Close-Resource',
     'New-DbCommand',
 		'Invoke-DbCommand',
-    'New-SqlConnection',
-		'Invoke-SqlBulkCopy'
+    'New-SqlServerConnection',
+		'Invoke-SqlServerBulkCopy'
   )
 }

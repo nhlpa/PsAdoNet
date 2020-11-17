@@ -7,7 +7,7 @@
       close and/or dispose the object.
 
   .PARAMETER InputObject
-      The resource that needs to be closed and/or disposed..
+      The resource(s) that needs to be closed and/or disposed.
 
   .EXAMPLE
       PS C:\> Close-Resource -InputObject $someCloseableDispoable, $a, $b
@@ -19,8 +19,7 @@ function Close-Resource {
     [CmdletBinding()]
     param (
        [Parameter(Mandatory=$True, 
-                  ValueFromPipeline=$True,
-                  HelpMessage="The resource(s) that needs to be closed and/or disposed.")]
+                  ValueFromPipeline=$True)]
        $InputObject)
 
     begin {}

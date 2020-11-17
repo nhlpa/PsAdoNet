@@ -11,52 +11,54 @@
   .PARAMETER Database
     The database to connect to.
 
-  .PARAMETER User
-    The user making the connection.
+  .PARAMETER Credential
+    The PSCredential for the connection.
 
-  .PARAMETER Password
-    The password for the connection.
+  .PARAMETER ConnectionTimeout
+    The connection timeout in seconds.
 
   .OUTPUTS 
     System.Data.SqlClient.SqlConnection
 
   .EXAMPLE
-    PS C:\> New-SqlConnection -ServerInstance SQLVM01
+    Create a new connection to a SQL Server instance using a trusted connection
+
+    PS C:\> New-SqlServerConnection -ServerInstance SQLVM01
       
   .EXAMPLE
-    PS C:\> New-SqlConnection -ServerInstance SQLVM01 -Database master
-      
-  .EXAMPLE
-    PS C:\> New-SqlConnection -ServerInstance SQLVM01 -Database SOME_DB -User sa -Password abc123
+    Create a new connection to a SQL Server instance and specific database using a PSCredential
+    
+    PS C:\> New-SqlServerConnection -ServerInstance SQLVM01 -Database Northwind -Credential (Get-Credential) -ConnectionTimeout 5 
+
 #>
-function New-SqlConnection {  
+function New-SqlServerConnection {  
   [CmdletBinding()]
   [OutputType([System.Data.SqlClient.SqlConnection])]
   param (
     [Parameter(Mandatory=$True,
-                ValueFromPipeline=$True,
-                HelpMessage="The computer name where SQL server resides.")]
-    [string] $ServerInstance,
+                ValueFromPipeline=$True)]
+    [string] 
+    $ServerInstance,
 
-    [Parameter(Mandatory=$False,
-                HelpMessage="The database to connect to.")]
-    [string] $Database,
+    [Parameter(Mandatory=$False)]
+    [string] 
+    $Database,
     
-    [Parameter(Mandatory=$False,
-                HelpMessage="The username making the connection.")]
-    [string] $User,
+    [Parameter(Mandatory=$False)]
+    [System.Management.Automation.PSCredential] 
+    $Credential,
     
-    [Parameter(Mandatory=$False,
-                HelpMessage="The account password for the connection.")]
-    [string] $Pwd)
+    [Parameter(Mandatory=$False)]
+    [Int32] 
+    $ConnectionTimeout)
 
   begin {
     if ($Database -ne '') {
       $databaseClause = "Database=$Database"
     }
 
-    if ($User -ne '' -and $Pwd -ne '') {
-      $connectionString = "Server=$ServerInstance;$databaseClause;User Id=$User;Password=$Pwd"
+    if ($Credential) {
+      $connectionString = "Server=$ServerInstance;$databaseClause;User Id=$($Credential.UserName);Password=$($Credential.GetNetworkCredential().Password)"
     }
     else {
       $connectionString = "Server=$ServerInstance;$databaseClause;Trusted_Connection=true"
@@ -64,7 +66,7 @@ function New-SqlConnection {
   }
   
   process {		
-    Write-Verbose "New-SqlConnection for '$connectionString'"
+    Write-Verbose "New-SqlConnection for '$ServerInstance'"
 
     try {
       $connection = New-Object System.Data.SqlClient.SqlConnection    

@@ -12,7 +12,7 @@ Describe "New-DbCommand" {
       }
       $cmd = New-DbCommand -Connection $conn -Query "SELECT 1" -Parameters $p
       
-      $cmd | Should -BeOfType System.Data.SqlClient.SqlCommand        
+      $cmd | Should -BeOfType System.Data.Common.DbCommand
       $cmd.CommandText | Should -BeExactly "SELECT 1"        
       $cmd.Parameters["a"].SqlValue | Should -BeExactly "Test"
       $cmd.Parameters["b"].SqlValue | Should -BeExactly 123

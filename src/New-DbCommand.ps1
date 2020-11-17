@@ -6,22 +6,19 @@
     Creates a new System.Data.Common.DbCommand with the command and query provided.
 
   .PARAMETER Connection
-    The Dbconnection to use.
+    The System.Data.Common.Dbconnection to use.
 
   .PARAMETER Query
-    The inline query to run. SEE -InputFile for file-based queries.
-
-  .PARAMETER InputFile
-    Filename of the query.
+    The query to run. 
 
   .PARAMETER Parameters
-    Command parameters.
+    Hashtable of command parameters.
 
   .OUTPUTS 
     System.Data.Common.DbCommand
 
-  .EXAMPLE
-    PS C:\> New-DbCommand -Connection (New-SqlConnection -ComputerName SQLVM01) -Query 'SELECT 1'
+  .EXAMPLE    
+    PS C:\> New-SqlServerConnection -ComputerName SQLVM01 | New-DbCommand -Query "SELECT 1"
 #>
 function New-DbCommand {
   [CmdletBinding()]
@@ -29,22 +26,21 @@ function New-DbCommand {
   param (    
       [Parameter(Mandatory=$True, 
                  ValueFromPipeline=$True,
-                 ValueFromPipelineByPropertyName=$True,
-                 HelpMessage='The database connection to use.')]
-      [System.Data.Common.DbConnection] $InputObject,
+                 ValueFromPipelineByPropertyName=$True)]
+      [Alias('Connection')]
+      [System.Data.Common.DbConnection] 
+      $InputObject,
 
-      [Parameter(Mandatory=$True,
-                 HelpMessage='The query to execute.')]
+      [Parameter(Mandatory=$True)]
       [string] $Query,
 
-      [Parameter(Mandatory=$False,
-                 HelpMessage='Command parameters.')]
+      [Parameter(Mandatory=$False)]
       [hashtable] $Parameters = @{ })
 
   begin {}
 
   process {    			
-    Write-Verbose "New-DbCommand for $($InputObject.Database)"
+    Write-Verbose "New-DbCommand for $($InputObject.DataSource)"
     Write-Debug "`n$Query`n`n`n"
 
     try {
@@ -60,7 +56,7 @@ function New-DbCommand {
       Write-Output $command
     }
     catch {
-      Write-Verbose "FAILED to create New-DbCommand for $($InputObject.Database)"
+      Write-Verbose "FAILED to create New-DbCommand for $($InputObject.DataSource)"
       
       if($command) {
         $command.Dispose()
