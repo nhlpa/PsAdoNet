@@ -59,28 +59,25 @@ function New-SqlServerConnection {
 
     if ($Credential) {
       $connectionString = "Server=$ServerInstance;$databaseClause;User Id=$($Credential.UserName);Password=$($Credential.GetNetworkCredential().Password)"
+      Write-Verbose "Creating connection for '$ServerInstance'"
     }
     else {
       $connectionString = "Server=$ServerInstance;$databaseClause;Trusted_Connection=true"
+      Write-Verbose "Creating connection for '$connectionString'"
     }
   }
   
   process {		
-    Write-Verbose "New-SqlServerConnection for '$ServerInstance'"
-
     try {
       $connection = New-Object System.Data.SqlClient.SqlConnection    
       $connection.ConnectionString = $connectionString    
+      Write-Verbose "Opening connection..."
       $connection.Open()
       Write-Output $connection  
     }
     catch {      			
-      if ($Credential) {
-        Write-Verbose "FAILED to establish New-SqlServerConnection for '$ServerInstance'"
-      }
-      else {
-        Write-Verbose "FAILED to establish New-SqlServerConnection for '$connectionString'"  
-      }
+      if ($Credential) { Write-Verbose "FAILED to establish New-SqlServerConnection for '$ServerInstance'" }
+      else { Write-Verbose "FAILED to establish New-SqlServerConnection for '$connectionString'" }
       
       if ($connection) {
         $connection.Dispose()
