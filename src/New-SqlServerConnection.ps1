@@ -53,7 +53,7 @@ function New-SqlServerConnection {
     $ConnectionTimeout)
 
   begin {
-    if ($Database -ne '') {
+    if ($Database) {
       $databaseClause = "Database=$Database"
     }
 
