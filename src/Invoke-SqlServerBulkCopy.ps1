@@ -75,8 +75,11 @@ function Invoke-SqlServerBulkCopy {
         $bulkCopy.Add_SQlRowscopied( { Write-Verbose "Rows copied: $($args[1].RowsCopied)" })
       }
 
-      if ($ColumnMappings) { 
-        $bulkCopy.ColumnMappings = $ColumnMappings 
+      if ($ColumnMappings) {         
+        $ColumnMappings.GetEnumerator() | ForEach-Object {
+          $bulkCopy.ColumnMappings.Add($_.Key, $_.Value)
+        }
+        
         Write-Verbose "ColumnMappings: $($bulkCopy.ColumnMappings | Format-Table -Property SourceColumn, DestinationColumn -AutoSize | Out-String)"
       }
 
