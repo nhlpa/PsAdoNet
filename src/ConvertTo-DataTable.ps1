@@ -20,8 +20,7 @@
 function ConvertTo-DataTable {
   [CmdLetBinding(DefaultParameterSetName = "None")]
   param(
-    [Parameter(Mandatory = $True, 
-      ValueFromPipeline = $True,
+    [Parameter(ValueFromPipeline = $True, 
       ValueFromPipelineByPropertyName = $True)]    
     [PSObject[]]
     $InputObject,
@@ -34,26 +33,28 @@ function ConvertTo-DataTable {
     Write-Verbose "Creating DataTable..."
     [System.Data.DataTable] $dt = New-Object System.Data.DataTable    
   }
-  process {            
-    foreach ($o in $InputObject) {      
-      Write-Verbose "Adding row to DataTable ($o)..."      
-      [System.Data.DataRow]$row = $dt.NewRow()
+  process {       
+    if ($null -ne $InputObject) {
+      foreach ($o in $InputObject) {      
+        Write-Verbose "Adding row to DataTable ($o)..."      
+        [System.Data.DataRow]$row = $dt.NewRow()
 
-      foreach ($prop in $o.PsObject.properties) {
-        $propName = $prop.Name
+        foreach ($prop in $o.PsObject.properties) {
+          $propName = $prop.Name
         
-        if (!$Columns -or ($Columns -and $Columns.Contains($propName))) {
-          if (-not $dt.Columns.Contains($propName)) {
-            Write-Verbose "Adding column ($propName) to DataTable..."
-            $dt.Columns.Add($propName) | Out-Null
+          if (!$Columns -or ($Columns -and $Columns.Contains($propName))) {
+            if (-not $dt.Columns.Contains($propName)) {
+              Write-Verbose "Adding column ($propName) to DataTable..."
+              $dt.Columns.Add($propName) | Out-Null
+            }
+        
+            Write-Verbose "Assigning $($prop.Value) to $propName"
+            $row[$propName] = $prop.Value
           }
-        
-          Write-Verbose "Assigning $($prop.Value) to $propName"
-          $row[$propName] = $prop.Value
         }
-      }
 
-      $dt.Rows.Add($row) | Out-Null
+        $dt.Rows.Add($row) | Out-Null
+      }
     }
   }
   end {

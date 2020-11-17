@@ -3,6 +3,12 @@ BeforeAll {
 }
 
 Describe "ConvertTo-DataTable" {
+    It "Give null, it returns empty DataTable" {
+        [System.Data.DataTable]$dt = $null | ConvertTo-DataTable
+        $dt.Rows.Count | Should -Be 0
+        $dt.Columns.Count | Should -Be 0        
+    }
+
     It "Given PSObject[], it creates DataTable" {            
         [System.Data.DataTable]$dt = [PSCustomObject]@{Id = 1; Description = "Description" } | ConvertTo-DataTable        
         $dt.Rows.Count | Should -Be 1
