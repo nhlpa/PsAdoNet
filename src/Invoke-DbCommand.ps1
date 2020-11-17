@@ -53,15 +53,15 @@ function Invoke-DbCommand {
   begin {}
 
   process {
-    Write-Verbose "Invoke-DbCommand for $($InputObject.Connection.DataSource)"       
+    $db = "$($InputObject.Connection.DataSource)\$($InputObject.Connection.Database)"
+    Write-Verbose "Invoke-DbCommand for $db"       
     Write-Debug "`n$($InputObject.CommandText)`n`n`n"
 
     try {
       if ($Scalar) {            
         Write-Output $InputObject.ExecuteScalar()
       }
-      elseif ($Reader) {
-        # Write-Output (, $InputObject.ExecuteReader()) # ',' prevents unrolling of reader
+      elseif ($Reader) {        
         Write-Output ($InputObject.ExecuteReader()) -NoEnumerate
       }
       elseif ($DataTable) {
@@ -77,7 +77,7 @@ function Invoke-DbCommand {
       }      
     }    
     catch {      
-      Write-Verbose "FAILED to Invoke-DbCommand for $($InputObject.Connection.DataSource)"
+      Write-Verbose "FAILED to Invoke-DbCommand for $db"
       $PSCmdlet.ThrowTerminatingError($PSitem)
     }
   }

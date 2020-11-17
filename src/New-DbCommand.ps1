@@ -40,15 +40,15 @@ function New-DbCommand {
   begin {}
 
   process {    			
-    Write-Verbose "New-DbCommand for $($InputObject.DataSource)"
-    Write-Debug "`n$Query`n`n`n"
-
+    $db = "$($InputObject.Connection.DataSource)\$($InputObject.Connection.Database)"
+    Write-Verbose "New-DbCommand for $db"
+    
     try {
       $command = $InputObject.CreateCommand() 
       $command.CommandText = $Query
 
       foreach ($p in $Parameters.GetEnumerator()) {
-        Write-Verbose "`New-DbCommand - Adding Parameter: $($p.Name) | $($p.Value)"
+        Write-Debug "`New-DbCommand - Adding Parameter: $($p.Name) | $($p.Value)"
 
         $command.Parameters.AddWithValue($p.Name, $p.Value) | Out-Null
       }
@@ -56,7 +56,7 @@ function New-DbCommand {
       Write-Output $command
     }
     catch {
-      Write-Verbose "FAILED to create New-DbCommand for $($InputObject.DataSource)"
+      Write-Verbose "FAILED to create New-DbCommand for $db"
       
       if ($command) {
         $command.Dispose()

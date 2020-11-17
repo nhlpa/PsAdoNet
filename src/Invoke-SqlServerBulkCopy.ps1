@@ -55,7 +55,8 @@ function Invoke-SqlServerBulkCopy {
   begin {}
 
   process {
-    Write-Verbose "Invoke-SqlServerBulkCopy for $($Table) on $Connection"
+    $db = "$($InputObject.Connection.DataSource)\$($InputObject.Connection.Database)\$Table"
+    Write-Verbose "Invoke-SqlServerBulkCopy for $db"
 
     try {
       $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy($Connection)
@@ -84,7 +85,7 @@ function Invoke-SqlServerBulkCopy {
       $bulkCopy # return for disposal
     } 
     catch {
-      Write-Verbose "FAILED to Invoke-SqlServerBulkCopy for $($InputObject.Connection.DataSource)"
+      Write-Verbose "FAILED to Invoke-SqlServerBulkCopy for $db"
       $PSCmdlet.ThrowTerminatingError($PSitem)
     }
   }
