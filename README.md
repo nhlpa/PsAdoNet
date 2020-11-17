@@ -22,17 +22,28 @@ A simple example demonstrating the execution of a simple query against a SQL Ser
 
 ```powershell
 # Create a DbConnection
-$conn = New-SqlServerConnection -ComputerName Northwind
+$conn = New-SqlServerConnection -ServerInstance SQLVM01
 
 # Create a DbCommand
-$cmd = New-DbCommand -Query 'SELECT * FROM Products' 
+$cmd = New-DbCommand -Query "SELECT * FROM Products"
 
 # Invoke query and display result
-Invoke-DbCommand 
-| Format-Table
+$cmd | Invoke-DbCommand | Format-Table
 
 # Properly dispose of objects
-$conn, $cmd | Close-Resource
+Close-Resource $conn, $cmd
+```
+
+An example demonstrating efficient and practical ETL pattern using `SqlBulkCopy` and an `IDataReader`.
+
+```powershell
+$source = New-SqlServerConnection -ServerInstance SQLVM01 -Database Northwind
+$dest = New-SqlServerConnection -ServerInstance SQLVM02 -Database Northwind
+
+$rd = $source | New-DbCommand -Query "SELECT * FROM Products" | Invoke-DbCommand -Reader
+$bcp = Invoke-SqlServerBulkCopy $rd -Connection $dest -Table "Products" -BatchSize 5000 -BulkCopyTimeout 30
+
+Close-Resource $source, $dest, $rd, $bcp
 ```
 
 ## Find a bug?
