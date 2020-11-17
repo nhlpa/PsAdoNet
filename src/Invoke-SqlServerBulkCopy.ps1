@@ -61,16 +61,17 @@ function Invoke-SqlServerBulkCopy {
       $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy($Connection)
       $bulkCopy.DestinationTableName = $Table
       
-      Write-Verbose "Batch Size: $($bulkCopy.BatchSize)"
-      $bulkCopy.BatchSize = $BatchSize 
+      if ($BatchSize -gt 0) {
+        Write-Verbose "Batch Size: $($bulkCopy.BatchSize)"
+        $bulkCopy.BatchSize = $BatchSize 
+      }
       
       Write-Verbose "Bulk Copy Timeout: $($bulkCopy.BulkCopyTimeout)"
       $bulkCopy.BulkCopyTimeout = $BulkCopyTimeout
       
-      if ($NotifyAfter -gt 0)
-      {
-          $bulkCopy.NotifyAfter = $notifyafter
-          $bulkCopy.Add_SQlRowscopied({ Write-Verbose "Rows copied: $($args[1].RowsCopied)" })
+      if ($NotifyAfter -gt 0) {
+        $bulkCopy.NotifyAfter = $notifyafter
+        $bulkCopy.Add_SQlRowscopied( { Write-Verbose "Rows copied: $($args[1].RowsCopied)" })
       }
 
       if ($ColumnMappings) { 
