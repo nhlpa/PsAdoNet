@@ -41,7 +41,7 @@ $source = New-SqlServerConnection -ServerInstance SQLVM01 -Database Northwind
 $dest = New-SqlServerConnection -ServerInstance SQLVM02 -Database Northwind
 
 $rd = $source | New-DbCommand -Query "SELECT * FROM Products" | Invoke-DbCommand -Reader
-$bcp = Invoke-SqlServerBulkCopy $rd -Connection $dest -Table "Products" -BatchSize 5000 -BulkCopyTimeout 30
+$bcp = Invoke-SqlServerBulkCopy -DataReader $rd -Connection $dest -Table "Products" -BatchSize 5000 -BulkCopyTimeout 30
 
 Close-Resource $source, $dest, $rd, $bcp
 ```
