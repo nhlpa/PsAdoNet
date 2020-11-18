@@ -29,35 +29,42 @@ function Invoke-SqlServerBulkCopy {
   [OutputType([System.Data.SqlClient.SqlBulkCopy])]
   param (
     
-    [Parameter(Mandatory = $True,
-      ValueFromPipeline = $True,
-      ValueFromPipelineByPropertyName = $True)]
+    [Parameter(Mandatory = $True, ParameterSetName = "Reader", ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
+    [Alias("Reader", "DataReader")]
     [System.Data.IDataReader]$InputObject,
+
+    [Parameter(Mandatory = $True, ParameterSetName = "DataTable", ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
+    [System.Data.DataTable]$DataTable,
     
-    [Parameter(Mandatory = $True)]
+    [Parameter(Mandatory = $True, ParameterSetName = "Reader")]
+    [Parameter(Mandatory = $True, ParameterSetName = "DataTable")]
     [System.Data.Common.DbConnection]$Connection,
     
-    [Parameter(Mandatory = $True)]
+    [Parameter(Mandatory = $True, ParameterSetName = "Reader")]
+    [Parameter(Mandatory = $True, ParameterSetName = "DataTable")]
     [string] $Table,
    
-    [Parameter(Mandatory = $False)]
+    [Parameter(Mandatory = $False, ParameterSetName = "Reader")]
+    [Parameter(Mandatory = $False, ParameterSetName = "DataTable")]
     [int] $BatchSize = 0,
     
-    [Parameter(Mandatory = $False)]
+    [Parameter(Mandatory = $False, ParameterSetName = "Reader")]
+    [Parameter(Mandatory = $False, ParameterSetName = "DataTable")]
     [int] $BulkCopyTimeout = 30,
 
-    [Parameter(Mandatory = $False)]
+    [Parameter(Mandatory = $False, ParameterSetName = "Reader")]
+    [Parameter(Mandatory = $False, ParameterSetName = "DataTable")]
     [hashtable] $ColumnMappings,
 
-    [Parameter(Mandatory = $False)]
+    [Parameter(Mandatory = $False, ParameterSetName = "Reader")]
+    [Parameter(Mandatory = $False, ParameterSetName = "DataTable")]
     [int] $NotifyAfter = 30) 
 
-  begin {}
-
-  process {
+  begin {
     $db = "$($Connection.DataSource)\$($Connection.Database)\$Table"
     Write-Verbose "Invoke-SqlServerBulkCopy for $db"
-
+  }
+  process {    
     try {
       $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy($Connection)
       $bulkCopy.DestinationTableName = $Table
@@ -83,7 +90,8 @@ function Invoke-SqlServerBulkCopy {
         Write-Verbose "ColumnMappings: $($bulkCopy.ColumnMappings | Format-Table -Property SourceColumn, DestinationColumn -AutoSize | Out-String)"
       }
 
-      $bulkCopy.WriteToServer($InputObject) 
+      if ($DataTable) { $bulkCopy.WriteToServer($DataTable) }
+      else { $bulkCopy.WriteToServer($InputObject) }
 
       $bulkCopy # return for disposal
     } 
@@ -92,6 +100,5 @@ function Invoke-SqlServerBulkCopy {
       $PSCmdlet.ThrowTerminatingError($PSitem)
     }
   }
-
   end {}  
 }
