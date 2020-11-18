@@ -52,8 +52,7 @@ An example using `ConvertTo-DataTable` to bulk copy an ad-hoc list of objects to
 $dest = New-SqlServerConnection -ServerInstance SQLVM02 -Database ProcessDb
 
 $dt = Get-Process | Select-Object -First 5 -Property Id, Description | ConvertTo-DataTable
-$rd = $dt.CreateDataReader()
-$bcp = Invoke-SqlServerBulkCopy $rd -Connection $dest -Table "Processes" -BatchSize 5000 -BulkCopyTimeout 30
+$bcp = Invoke-SqlServerBulkCopy -DataTable $dt -Connection $dest -Table "Process" -ColumnMappings @{Id = "Id"; Description = "Description" }
 
 Close-Resource $dest, $rd, $bcp
 ```
