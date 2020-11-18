@@ -15,6 +15,9 @@
     System.Data.DataTable
 
   .EXAMPLE    
+    PS C:\> $[PSCustomObject]@{Id = 1; Description = "Description" } | ConvertTo-DataTable
+  
+  .EXAMPLE    
     PS C:\> Get-Process | Select-Object -First 5 -Property Id, Description | ConvertTo-DataTable
 #>
 function ConvertTo-DataTable {
@@ -22,7 +25,7 @@ function ConvertTo-DataTable {
   param(
     [Parameter(ValueFromPipeline = $True, 
       ValueFromPipelineByPropertyName = $True)]    
-    [PSObject[]]
+    [PSCustomObject[]]
     $InputObject,
     
     [Parameter(Mandatory = $false)]
@@ -36,23 +39,27 @@ function ConvertTo-DataTable {
   process {       
     if ($InputObject) {
       foreach ($o in $InputObject) {      
-        Write-Verbose "Adding row to DataTable ($o)..."      
+        Write-Verbose "Adding row to DataTable ($o)"      
         [System.Data.DataRow]$row = $dt.NewRow()
 
-        foreach ($prop in $o.PsObject.properties) {
-          $propName = $prop.Name
-        
+        $o 
+        | Get-Member -MemberType NoteProperty 
+        | ForEach-Object {
+          $propName = $_.Name
+
           if (!$Columns -or ($Columns -and $Columns.Contains($propName))) {
             if (-not $dt.Columns.Contains($propName)) {
-              Write-Verbose "Adding column ($propName) to DataTable..."
-              $dt.Columns.Add($propName) | Out-Null
+              Write-Verbose "Adding column ($propName) to DataTable"
+              $dt.Columns.Add($propName) | Out-Null              
             }
-        
-            Write-Verbose "Assigning $($prop.Value) to $propName"
-            $row[$propName] = $prop.Value
+            
+            $propValue = $o.$propName
+            Write-Verbose "Assigning $propValue to $propName"
+            $row[$propName] = $propValue
           }
         }
 
+        Write-Verbose "Adding row to table"
         $dt.Rows.Add($row) | Out-Null
       }
     }

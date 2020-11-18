@@ -10,7 +10,7 @@ Describe "ConvertTo-DataTable" {
     }
 
     It "Given PSObject[], it creates DataTable" {            
-        [System.Data.DataTable]$dt = [PSCustomObject]@{Id = 1; Description = "Description" } | ConvertTo-DataTable        
+        [System.Data.DataTable]$dt = [PSCustomObject]@{Id = 1; Description = "Description" } | ConvertTo-DataTable
         $dt.Rows.Count | Should -Be 1
         $dt.Columns.Count | Should -Be 2        
         $dt.Rows[0]["Id"] | Should -Be 1
