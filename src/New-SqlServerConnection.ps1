@@ -44,7 +44,8 @@ function New-SqlServerConnection {
     [Parameter(Mandatory = $False)]
     [System.Management.Automation.PSCredential] 
     $Credential
-
+  )
+  
   begin {
     if ($Database) {
       $databaseClause = "Database=$Database;"
