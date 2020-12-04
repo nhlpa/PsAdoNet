@@ -50,7 +50,7 @@ function New-SqlServerConnection {
     
     [Parameter(Mandatory = $False)]
     [Int32] 
-    $ConnectionTimeout)
+    $ConnectionTimeout = 30)
 
   begin {
     if ($Database) {
@@ -64,13 +64,15 @@ function New-SqlServerConnection {
     else {
       $connectionString = "Server=$ServerInstance;$($databaseClause)Trusted_Connection=true"
       Write-Verbose "Creating connection for '$connectionString'"
-    }
+    }    
   }
   
   process {		
     try {
       $connection = New-Object System.Data.SqlClient.SqlConnection    
       $connection.ConnectionString = $connectionString    
+      $connection.ConnectionTimeout = $ConnectionTimeout
+      
       Write-Verbose "Opening connection..."
       $connection.Open()
       Write-Output $connection  

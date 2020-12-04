@@ -11,6 +11,9 @@
   .PARAMETER Query
     The query to run. 
 
+  .PARAMETER CommandTimeout
+    The command timeout in seconds.
+
   .PARAMETER Parameters
     Hashtable of command parameters.
 
@@ -35,6 +38,10 @@ function New-DbCommand {
     [string] $Query,
 
     [Parameter(Mandatory = $False)]
+    [Int32] 
+    $CommandTimeout = 30,
+
+    [Parameter(Mandatory = $False)]
     [hashtable] $Parameters = @{ })
 
   begin {}
@@ -46,7 +53,8 @@ function New-DbCommand {
     try {
       $command = $InputObject.CreateCommand() 
       $command.CommandText = $Query
-
+      $command.CommandTimeout = $CommandTimeout
+      
       foreach ($p in $Parameters.GetEnumerator()) {
         Write-Debug "`New-DbCommand - Adding Parameter: $($p.Name) | $($p.Value)"
 
