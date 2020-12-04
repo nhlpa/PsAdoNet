@@ -14,9 +14,6 @@
   .PARAMETER Credential
     The PSCredential for the connection.
 
-  .PARAMETER ConnectionTimeout
-    The connection timeout in seconds.
-
   .OUTPUTS 
     System.Data.SqlClient.SqlConnection
 
@@ -46,11 +43,7 @@ function New-SqlServerConnection {
     
     [Parameter(Mandatory = $False)]
     [System.Management.Automation.PSCredential] 
-    $Credential,
-    
-    [Parameter(Mandatory = $False)]
-    [Int32] 
-    $ConnectionTimeout = 30)
+    $Credential
 
   begin {
     if ($Database) {
@@ -71,8 +64,7 @@ function New-SqlServerConnection {
     try {
       $connection = New-Object System.Data.SqlClient.SqlConnection    
       $connection.ConnectionString = $connectionString    
-      $connection.ConnectionTimeout = $ConnectionTimeout
-      
+
       Write-Verbose "Opening connection..."
       $connection.Open()
       Write-Output $connection  
