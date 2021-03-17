@@ -58,17 +58,21 @@ function Invoke-SqlServerBulkCopy {
 
     [Parameter(Mandatory = $False, ParameterSetName = "Reader")]
     [Parameter(Mandatory = $False, ParameterSetName = "DataTable")]
-    [int] $NotifyAfter = 30) 
+    [int] $NotifyAfter = 30,
+    
+    [Parameter(Mandatory = $False, ParameterSetName = "Reader")]
+    [Parameter(Mandatory = $False, ParameterSetName = "DataTable")]
+    [System.Data.SqlClient.SqlBulkCopyOptions] $Options = [System.Data.SqlClient.SqlBulkCopyOptions]::Default) 
 
   begin {
     $db = "$($Connection.DataSource)\$($Connection.Database)\$Table"
     Write-Verbose "Invoke-SqlServerBulkCopy for $db"
   }
   process {    
-    try {
-      $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy($Connection)
+    try {      
+      $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy($Connection, $Options, $null)
       $bulkCopy.DestinationTableName = $Table
-      
+            
       if ($BatchSize -gt 0) {
         $bulkCopy.BatchSize = $BatchSize 
         Write-Verbose "Batch Size: $($bulkCopy.BatchSize)"
