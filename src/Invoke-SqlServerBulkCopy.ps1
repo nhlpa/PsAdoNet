@@ -70,7 +70,7 @@ function Invoke-SqlServerBulkCopy {
   }
   process {    
     try {      
-      $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy($Connection, $Options, $null)
+      $bulkCopy = New-Object System.Data.SqlClient.SqlBulkCopy -ArgumentList $Connection, ($Options), $null
       $bulkCopy.DestinationTableName = $Table
             
       if ($BatchSize -gt 0) {
