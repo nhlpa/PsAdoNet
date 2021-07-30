@@ -34,7 +34,7 @@
 #>
 function Invoke-DbCommand {
   [CmdletBinding()]
-  [OutputType([int])]
+  [OutputType([int],[Object], [System.Data.DataTable], [System.Data.IDataReader])]
   param (
     [Parameter(Mandatory = $True,
       ValueFromPipeline = $True,
@@ -66,11 +66,13 @@ function Invoke-DbCommand {
       }
       elseif ($DataTable) {
         $tbl = New-Object System.Data.DataTable
+        
         $rd = $InputObject.ExecuteReader()
         $tbl.Load($rd)
         $rd.Close()
         $rd.Dispose()
-        Write-Output $tbl
+
+        Write-Output $tbl -NoEnumerate
       }
       else {
         Write-Output $InputObject.ExecuteNonQuery()
