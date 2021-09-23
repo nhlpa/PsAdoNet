@@ -13,6 +13,8 @@ Describe "ConvertTo-DataTable" {
         [System.Data.DataTable]$dt = [PSCustomObject]@{Id = 1; Description = "Description" } | ConvertTo-DataTable
         $dt.Rows.Count | Should -Be 1
         $dt.Columns.Count | Should -Be 2        
+        $dt.Columns[0].ColumnName | Should -Be "Id"
+        $dt.Columns[1].ColumnName | Should -Be "Description"
         $dt.Rows[0]["Id"] | Should -Be 1
         $dt.Rows[0]["Description"] | Should -Be "Description"
     }

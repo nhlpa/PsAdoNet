@@ -42,9 +42,9 @@ function ConvertTo-DataTable {
         Write-Verbose "Adding row to DataTable ($o)"      
         [System.Data.DataRow]$row = $dt.NewRow()
 
-        $o 
-        | Get-Member -MemberType NoteProperty 
-        | ForEach-Object {
+        $o.PsObject.properties
+        | Where-Object MemberType -eq "NoteProperty" 
+        | ForEach-Object { 
           $propName = $_.Name
 
           if (!$Columns -or ($Columns -and $Columns.Contains($propName))) {
