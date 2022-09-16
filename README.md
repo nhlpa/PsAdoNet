@@ -62,8 +62,8 @@ Close-Resource $dest, $rd, $bcp
 
 ## Find a bug?
 
-There's an [issue](https://github.com/pimbrouwers/PsAdoNet/issues) for that.
+There's an [issue](https://github.com/nhlpa/PsAdoNet/issues) for that.
 
 ## License
 
-Built with ♥ by [Pim Brouwers](https://github.com/pimbrouwers) in Toronto, ON. Licensed under [Apache License 2.0](https://github.com/pimbrouwers/PsAdoNet/blob/master/LICENSE).
+Built with ♥ by [NHLPA Engineering](https://github.com/nhlpa) in Toronto, ON. Licensed under [MIT](https://github.com/nhlpa/PsAdoNet/blob/master/LICENSE).
